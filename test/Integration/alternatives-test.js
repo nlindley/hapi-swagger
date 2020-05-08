@@ -147,6 +147,25 @@ lab.experiment('alternatives', () => {
           })
         }
       }
+    },
+    {
+      method: 'POST',
+      path: '/store6/',
+      options: {
+        handler: Helper.defaultHandler,
+        tags: ['api'],
+        validate: {
+          payload: Joi.alternatives()
+            .conditional(".type", {
+              switch: [
+                { is: "string", then: Joi.object({ type: Joi.string().valid("string"), text: Joi.string() }) },
+                { is: "number", then: Joi.object({ type: Joi.string().valid("number"), value: Joi.number() }) },
+                { is: "image", then: Joi.object({ type: Joi.string().valid("image"), uri: Joi.string().uri() }) },
+              ]
+            })
+            .label("Discriminated Union")
+        }
+      }
     }
   ];
 
